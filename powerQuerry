@@ -1,0 +1,16 @@
+let
+    Source = Excel.CurrentWorkbook(){[Name="Table2"]}[Content],
+    Table.FillDown = Table.FillDown(Source,{"Column1"}),
+    // c1
+    //Table.Group = Table.Group(Table.FillDown, {"Column1"}, {{"Combine1", each Text.Combine(_[Column2],",")}})
+    // c2
+    //Table.Group = Table.Group(Table.FillDown, {"Column1"}, {{"Combine1", each Text.Combine(List.Transform(Table.Column(_,"Column2") & Table.Column(_,"Column3"),each Text.From(_)), ", "), type text}})
+    Table.Group= Table.Group(Table.FillDown, {"Column1"}, 
+     {
+          {"ColumnBine1", each Text.Combine(List.Select([Column3], each _ <> ""), ", "), type text},
+        // {"ColumnBine1", each Text.Combine(List.Select([Column2], each _ <> ""), ", ")},
+        // {"ColumnBine2", each Text.Combine(List.Select([Column3], each _ <> ""), ", "), type text}
+        {"ColumnBine2", each Text.Combine(List.Select([Column3], each _ <> ""), ", ")}  
+    })
+in
+    Table.Group
